@@ -7,11 +7,7 @@ steps{
  checkout scm
 }
 }
-stage('install ansible'){
-steps{
-sh 'sudo yum install ansible'
-}
-}
+
 stage('run the playbook'){
    steps{
      sh 'ansible-playbook -i inventory.ini playbook.yml'
