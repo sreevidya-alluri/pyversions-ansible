@@ -10,7 +10,7 @@ steps{
 
 stage('run the playbook'){
    steps{
-     sh 'ansible-playbook -i inventory.ini playbook.yml'
+     sh 'ansible-playbook -i /home/sree-vidya/inventory.ini /home/sree-vidya/playbook.yml'
 }
 }
 }
