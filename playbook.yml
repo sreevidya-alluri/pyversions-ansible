@@ -3,5 +3,4 @@
   hosts: all
   become: yes
   roles:
-    - python_install
-
+     - python_install

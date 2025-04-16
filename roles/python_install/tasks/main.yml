@@ -1,47 +1,28 @@
 ---
-- name: Install build dependencies
+- name: Install EPEL repo for step 2
+  yum:
+    name: epel-release
+    state: present
+- name: Clean yum cache
+  command: yum clean all
+- name: Update metadata
+  command: yum update -y
+- name: Add the repo to yum install
+  yum:
+    name: https://repo.ius.io/ius-release-el7.rpm
+    disable_gpg_check: yes
+    state: present
+- name: Update all packages
+  yum:
+    name: "*"
+    state: latest
+- name: Download and install python
   yum:
     name:
-      - gcc
-      - make
-      - wget
-      - openssl-devel
-      - bzip2-devel
-      - libffi-devel
-    state: present
-
-- name: Download Python source
-  get_url:
-    url: "https://www.python.org/ftp/python/{{ item }}/Python-{{ item }}.tgz"
-    dest: "/usr/src/Python-{{ item }}.tgz"
-    mode: '0644'
-  loop: "{{ python_versions }}"
-
-- name: Extract Python source
-  unarchive:
-    src: "/usr/src/Python-{{ item }}.tgz"
-    dest: "/usr/src"
-    remote_src: yes
-  loop: "{{ python_versions }}"
-
-- name: Build and install Python
-  shell: |
-    cd /usr/src/Python-{{ item }}
-    ./configure --enable-optimizations
-    make -j$(nproc)
-    make altinstall
-  args:
-    creates: "/usr/local/bin/python{{ item.split('.')[0] }}.{{ item.split('.')[1] }}"
-  loop: "{{ python_versions }}"
-
-- name: Verify installed Python versions
-  shell: "/usr/local/bin/python{{ item.split('.')[0] }}.{{ item.split('.')[1] }} --version"
-  loop: "{{ python_versions }}"
-  register: py_versions
-  changed_when: false
-
-- name: Display installed versions
-  debug:
-    msg: "{{ item.stdout }}"
-  loop: "{{ py_versions.results }}"
+      - python36u
+      - python36u-libs
+      - python36u-devel
+      - python36u-pip
+    state:
+      present 
 
