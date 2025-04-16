@@ -1,6 +1,6 @@
 ---
 - name: Install Python versions using a simple role
-  hosts: all
+  hosts: webservers
   become: yes
   roles:
      - python_install
